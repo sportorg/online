@@ -1,0 +1,18 @@
+version: '2.1'
+
+services:
+  sportorg:
+    container_name: sportorg
+    image: sportorg/online:latest
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    restart: always
+    networks:
+      - sportorg_nw
+    ports:
+      - 8080:8080
+
+networks:
+  sportorg_nw:
+    driver: bridge
