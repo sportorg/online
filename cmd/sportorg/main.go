@@ -1,14 +1,37 @@
 package main
 
 import (
+	"encoding/json"
+	"flag"
 	"fmt"
 	"github.com/sportorg/online/api"
 	"github.com/sportorg/online/database"
+	"os"
 )
 
+var (
+	config = flag.String("config", "./data/config.json", "Path to config file")
+)
+
+type Configuration struct {
+	Addr            string `json:"addr"`
+	PathToPWA       string `json:"path_to_pwa"`
+	MySQLSourceName string `json:"mysql_source_name"`
+}
+
 func main() {
-	db := database.Connect("root:P@ssw0rd@tcp(127.0.0.1:3306)/sportorg")
+	flag.Parse()
+	file, _ := os.Open(*config)
+	defer file.Close()
+	decoder := json.NewDecoder(file)
+	configuration := Configuration{}
+	err := decoder.Decode(&configuration)
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+	db := database.Connect(configuration.MySQLSourceName)
 	defer db.Close()
 	fmt.Println("Running Sportorg Online")
-	api.Run(":8080", "./web/dist/sportorg-online")
+	api.Run(configuration.Addr, configuration.PathToPWA)
 }

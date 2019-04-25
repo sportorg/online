@@ -25,6 +25,7 @@ FROM alpine
 RUN apk --no-cache add ca-certificates
 WORKDIR /usr/share/sportorg/
 COPY --from=build-go /go/src/github.com/sportorg/online/sportorg ./sportorg
+COPY --from=build-go /go/src/github.com/sportorg/online/data ./data
 COPY --from=build-node /web/dist ./web/dist
 EXPOSE 8080
 CMD ["./sportorg"]

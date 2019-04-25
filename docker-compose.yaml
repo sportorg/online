@@ -9,9 +9,33 @@ services:
       dockerfile: ./Dockerfile
     restart: always
     networks:
-      - sportorg_nw
+    - sportorg_nw
     ports:
-      - 8080:8080
+    - 8080:8080
+    depends_on:
+    - db
+    volumes:
+      - ./data:/usr/share/sportorg/data
+  db:
+    image: mysql:5.7
+    container_name: db
+    restart: always
+    networks:
+    - sportorg_nw
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-sportorg}
+      MYSQL_USER: ${MYSQL_USER:-root}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-P@ssw0rd}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-P@ssw0rd}
+    ports:
+    - '3306:3306'
+    expose:
+    - '3306'
+    volumes:
+    - sportorg_db:/var/lib/mysql
+
+volumes:
+  sportorg_db:
 
 networks:
   sportorg_nw:
