@@ -13,12 +13,12 @@ services:
     ports:
     - 8080:8080
     depends_on:
-    - db
+    - database
     volumes:
-      - ./data:/usr/share/sportorg/data
-  db:
+    - ./data:/usr/share/sportorg/data
+  database:
     image: mysql:5.7
-    container_name: db
+    container_name: database
     restart: always
     networks:
     - sportorg_nw

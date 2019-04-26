@@ -3,7 +3,8 @@ RUN apk --no-cache add git bzr mercurial
 ENV D=/go/src/github.com/sportorg/online
 RUN go get -u github.com/golang/dep/...
 ADD ./ $D/
-RUN cd $D && export GO111MODULE=on \
+ENV GO111MODULE on
+RUN cd $D \
     && go get -u \
     && go build ./cmd/sportorg
 
