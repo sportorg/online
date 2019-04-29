@@ -32,6 +32,8 @@ func main() {
 	}
 	db := database.Connect(configuration.MySQLSourceName)
 	defer db.Close()
+	// TODO: Wait db connection
+	database.RunMigrations(db)
 	fmt.Println("Running Sportorg Online")
 	api.Run(configuration.Addr, configuration.PathToPWA)
 }
